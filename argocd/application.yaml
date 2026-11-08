@@ -1,0 +1,26 @@
+# Application de ArgoCD: despliega la app Flask + Redis de la práctica 07
+# a partir de la carpeta k8s/ de este repositorio.
+#
+# Es lo único que se aplica con kubectl, una sola vez (el "arranque"):
+#   kubectl apply -f argocd/application.yaml
+# A partir de ahí, la app solo cambia haciendo git push al repositorio.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: asr-flask
+  namespace: argocd
+  # Al borrar la Application, ArgoCD borra antes todo lo que desplegó
+  # (incluido el balanceador de la app), en vez de dejarlo huérfano.
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/lorentebarqueros/asr-p8-gitops.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  # Sin syncPolicy: ArgoCD detecta las diferencias con Git, pero espera a que
+  # se sincronice a mano. El sync automático se añade en el paso 4.

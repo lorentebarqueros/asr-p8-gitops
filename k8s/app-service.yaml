@@ -1,0 +1,22 @@
+# Service LoadBalancer: GKE crea un balanceador de Google Cloud con IP pública
+# que reparte el tráfico (puerto 80) entre los pods de la app (puerto 8080).
+#
+# Requisito de seguridad 3: solo acepta tráfico de las IPs de
+# loadBalancerSourceRanges (GKE lo traduce a una regla de firewall k8s2-...).
+# Si cambia mi IP pública, se actualiza aquí y se hace git push: ArgoCD lo aplica.
+apiVersion: v1
+kind: Service
+metadata:
+  name: asr-flask
+  labels:
+    app: asr-flask
+spec:
+  type: LoadBalancer
+  selector:
+    app: asr-flask
+  loadBalancerSourceRanges:
+  - 87.124.131.27/32
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP

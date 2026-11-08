@@ -1,0 +1,45 @@
+# App Flask de la práctica 07. Único cambio: la imagen va escrita tal cual,
+# porque ArgoCD aplica los ficheros del repositorio sin ningún sed previo.
+# Sin HPA: el número de réplicas lo decide Git (campo replicas).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asr-flask
+  labels:
+    app: asr-flask
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: asr-flask
+  template:
+    metadata:
+      labels:
+        app: asr-flask
+    spec:
+      containers:
+      - name: asr-flask
+        image: europe-southwest1-docker.pkg.dev/asr-p8-juanlb/asr-registry/asr-flask:v1
+        ports:
+        - containerPort: 8080
+        env:
+        # En vez de la IP de la VM de Redis, usamos el nombre del Service
+        - name: REDIS_IP_GCP
+          value: "redis"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
+          limits:
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
