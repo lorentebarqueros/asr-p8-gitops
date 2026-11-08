@@ -22,5 +22,8 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: default
-  # Sin syncPolicy: ArgoCD detecta las diferencias con Git, pero espera a que
-  # se sincronice a mano. El sync automático se añade en el paso 4.
+  # Sync automático: ArgoCD aplica solo cualquier diferencia con Git.
+  syncPolicy:
+    automated:
+      prune: true     # borra del clúster lo que ya no esté en Git
+      selfHeal: true  # deshace los cambios hechos a mano en el clúster
