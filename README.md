@@ -9,7 +9,7 @@ repositorio.
 | Ruta | Qué es |
 | --- | --- |
 | `k8s/` | Manifiestos de la app. ArgoCD sincroniza **solo** esta carpeta |
-| `k8s/app-deployment.yaml` | App Flask (`replicas: 2`, imagen en Artifact Registry) |
+| `k8s/app-deployment.yaml` | App Flask (réplicas fijadas en Git, sin HPA; imagen en Artifact Registry) |
 | `k8s/app-service.yaml` | `LoadBalancer` restringido a una IP con `loadBalancerSourceRanges` |
 | `k8s/redis-deployment.yaml`, `k8s/redis-service.yaml` | Redis, solo accesible dentro del clúster (`ClusterIP`) |
 | `argocd/application.yaml` | La `Application` de ArgoCD que apunta a `k8s/` |
