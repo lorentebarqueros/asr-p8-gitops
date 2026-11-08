@@ -27,5 +27,4 @@ repositorio.
 
 - Los nodos del clúster no tienen IP pública: ArgoCD llega a GitHub a través de Cloud NAT.
 - Los dos `LoadBalancer` (la app y la UI de ArgoCD) solo aceptan orígenes de confianza.
-- En este repositorio no hay secretos: la contraseña de ArgoCD y el secreto del webhook
-  viven solo en el clúster.
+
